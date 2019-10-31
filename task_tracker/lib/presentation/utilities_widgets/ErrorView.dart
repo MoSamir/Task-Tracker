@@ -12,8 +12,8 @@ class ErrorHandleView extends StatelessWidget {
       child: Center(
         child: Image.asset(
           Assets.NOT_FOUND,
-          width: width * .5,
-          height: height * .5,
+          width: width * .7,
+          height: height * .7,
         ),
       ),
     );
