@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "871429482624",
+    "firebase_url": "https://blowsteam.firebaseio.com",
+    "project_id": "blowsteam",
+    "storage_bucket": "blowsteam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871429482624:android:d8534418cf832fe32a9e65",
+        "android_client_info": {
+          "package_name": "com.example.task_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871429482624-469g9jj8bqaq8doveaa10r25vhq5oe02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChLR9WmNy4-7tF1a4ECtfoepxaNgKfj-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871429482624-469g9jj8bqaq8doveaa10r25vhq5oe02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871429482624:android:dfc49fc5d813c6aa2a9e65",
+        "android_client_info": {
+          "package_name": "com.mohamedsamir731.blow_steam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "871429482624-469g9jj8bqaq8doveaa10r25vhq5oe02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChLR9WmNy4-7tF1a4ECtfoepxaNgKfj-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "871429482624-469g9jj8bqaq8doveaa10r25vhq5oe02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

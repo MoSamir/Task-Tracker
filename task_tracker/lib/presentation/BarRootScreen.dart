@@ -6,6 +6,9 @@ import 'package:task_tracker/utilities/Constants.dart';
 import 'NotesScreen.dart';
 
 class RootScreen extends StatefulWidget {
+  static GlobalKey<FancyBottomNavigationState> navigatorKey =
+      GlobalKey<FancyBottomNavigationState>();
+
   @override
   _RootScreenState createState() => _RootScreenState();
 }
@@ -16,6 +19,7 @@ class _RootScreenState extends State<RootScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: FancyBottomNavigation(
+        key: RootScreen.navigatorKey,
         activeIconColor: AppColors.WHITE_COLOR,
         barBackgroundColor: AppColors.WHITE_COLOR,
         inactiveIconColor: AppColors.BLACK_COLOR,
