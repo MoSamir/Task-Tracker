@@ -21,20 +21,38 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   TextEditingController _taskDescriptionController = TextEditingController();
   Color taskColor = AppColors.APP_COLOR;
   TaskViewModel taskViewModel = TaskViewModel();
+  DataBloc dataBloc;
+  bool categoryDefined = false;
   AddNoteBloc _bloc;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    taskViewModel.taskType = Strings.TASK_TYPES[0];
+    dataBloc = BlocProvider.of<DataBloc>(context);
     _bloc = AddNoteBloc();
+    dataBloc.listen((state) {
+      if (state is DataLoaded)
+        setState(() {
+          taskViewModel.taskType =
+              state.userData.userCategories[0].categoryName;
+        });
+    });
     // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (dataBloc.state is DataLoaded) {
+      ((dataBloc.state as DataLoaded))
+          .userData
+          .userCategories
+          .forEach((category) {
+        print('Category =>  ${category.categoryColor}');
+      });
+    }
+
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -109,6 +127,10 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                             : Strings.REQUIRED_FIELD_ERROR;
                                       },
                                       controller: _taskNameController,
+                                      onChanged: (text) {
+                                        if (categoryDefined == false)
+                                          suggestCategory(text);
+                                      },
                                       cursorColor: taskColor,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
@@ -140,31 +162,58 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           SizedBox(
                             height: 5,
                           ),
-                          ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: Strings.TASK_TYPES.length,
-                            itemBuilder: (context, index) {
-                              return RadioListTile(
-                                isThreeLine: false,
-                                dense: true,
-                                title: Text(Strings.TASK_TYPES[index]),
-                                onChanged: (v) {
-                                  setState(() {
-                                    taskColor =
-                                        AppColors.TASK_TYPES_COLOR[index];
-                                    taskViewModel.taskType =
-                                        Strings.TASK_TYPES[index];
-                                  });
-                                },
-                                selected: Strings.TASK_TYPES[index] ==
-                                    taskViewModel.taskType,
-                                value: taskViewModel.taskType,
-                                activeColor: AppColors.TASK_TYPES_COLOR[index],
-                                groupValue: Strings.TASK_TYPES[index],
-                              );
-                            },
-                          ),
+                          (dataBloc.state is DataLoaded)
+                              ? ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: (dataBloc.state as DataLoaded)
+                                      .userData
+                                      .userCategories
+                                      .length,
+                                  itemBuilder: (context, index) {
+                                    return RadioListTile(
+                                      isThreeLine: false,
+                                      dense: true,
+                                      title: Text((dataBloc.state as DataLoaded)
+                                          .userData
+                                          .userCategories[index]
+                                          .categoryName),
+                                      onChanged: (v) {
+                                        setState(() {
+                                          categoryDefined = true;
+                                          taskColor = Color(int.parse(
+                                              (dataBloc.state as DataLoaded)
+                                                  .userData
+                                                  .userCategories[index]
+                                                  .categoryColor));
+                                          taskViewModel.taskType =
+                                              (dataBloc.state as DataLoaded)
+                                                  .userData
+                                                  .userCategories[index]
+                                                  .categoryName;
+                                        });
+                                      },
+                                      selected: (dataBloc.state as DataLoaded)
+                                              .userData
+                                              .userCategories[index]
+                                              .categoryName ==
+                                          taskViewModel.taskType,
+                                      value: taskViewModel.taskType,
+                                      activeColor: Color(int.parse(
+                                          (dataBloc.state as DataLoaded)
+                                              .userData
+                                              .userCategories[index]
+                                              .categoryColor)),
+                                      groupValue: (dataBloc.state as DataLoaded)
+                                          .userData
+                                          .userCategories[index]
+                                          .categoryName,
+                                    );
+                                  },
+                                )
+                              : SizedBox(
+                                  child: LoadingView(),
+                                ),
                           SizedBox(
                             height: 10,
                           ),
@@ -282,6 +331,39 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       taskViewModel.taskName = _taskNameController.text;
       //(note:taskViewModel);
       _bloc.add(CreateNote(newNote: taskViewModel));
+    }
+  }
+
+  void suggestCategory(String text) {
+    if (dataBloc.state is DataLoaded) {
+      (dataBloc.state as DataLoaded).userData.userCategories.forEach(
+        (category) {
+          if (category.categoryName
+              .toString()
+              .toLowerCase()
+              .contains(text.toLowerCase())) {
+            setState(() {
+              //categoryDefined = true;
+              taskColor = Color(int.parse(category.categoryColor));
+              taskViewModel.taskType = category.categoryName;
+              return;
+            });
+          }
+        },
+      );
+
+//      setState(() {
+//        //categoryDefined = true;
+//        taskColor = Color(int.parse((dataBloc.state as DataLoaded)
+//            .userData
+//            .userCategories[0]
+//            .categoryColor));
+//        taskViewModel.taskType = (dataBloc.state as DataLoaded)
+//            .userData
+//            .userCategories[0]
+//            .categoryName;
+//        return;
+//      });
     }
   }
 }

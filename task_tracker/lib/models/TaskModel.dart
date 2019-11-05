@@ -1,27 +1,42 @@
 import 'package:task_tracker/utilities/Constants.dart';
 
 class TaskViewModel {
-  String taskName, taskDescription, taskType;
-  int taskId;
+  var taskName, taskDescription, taskType, taskCreationDate, taskCompletionDate;
+  var taskId, isTaskDone;
 
   TaskViewModel(
-      {this.taskDescription, this.taskType, this.taskName, this.taskId});
+      {this.taskDescription,
+      this.taskType,
+      this.taskName,
+      this.taskId,
+      this.taskCreationDate,
+      this.taskCompletionDate,
+      this.isTaskDone});
 
   Map<String, dynamic> toMap() {
-    return {
-      //DBKeys.ID_KEY: taskId.toString(),
+    Map<String, dynamic> taskMap = {
       DBKeys.TASK_NAME_KEY: taskName,
       DBKeys.TASK_PRIORITY_KEY: taskType,
       DBKeys.TASK_DESCRIPTION_KEY: taskDescription,
+      DBKeys.TASK_COMPLETION_DATE_KEY: taskCompletionDate,
+      DBKeys.TASK_CREATION_DATE_KEY: taskCreationDate,
+      DBKeys.TASK_STATUES_KEY: isTaskDone,
     };
+
+    if (taskId != null) taskMap.putIfAbsent(DBKeys.TASK_ID_KEY, () => taskId);
+
+    return taskMap;
   }
 
   Map<String, dynamic> toCloudMap() {
     return {
-      DBKeys.ID_KEY: taskId.toString(),
+      DBKeys.TASK_ID_KEY: taskId.toString(),
       DBKeys.TASK_NAME_KEY: taskName,
       DBKeys.TASK_PRIORITY_KEY: taskType,
       DBKeys.TASK_DESCRIPTION_KEY: taskDescription,
+      DBKeys.TASK_COMPLETION_DATE_KEY: taskCompletionDate,
+      DBKeys.TASK_CREATION_DATE_KEY: taskCreationDate,
+      DBKeys.TASK_STATUES_KEY: isTaskDone,
     };
   }
 
@@ -30,12 +45,21 @@ class TaskViewModel {
       taskDescription: json[DBKeys.TASK_DESCRIPTION_KEY] != null
           ? json[DBKeys.TASK_DESCRIPTION_KEY]
           : '',
-      taskId: json[DBKeys.ID_KEY] != null ? json[DBKeys.ID_KEY] : 0,
+      taskId: json[DBKeys.TASK_ID_KEY] != null ? json[DBKeys.TASK_ID_KEY] : 0,
       taskType: json[DBKeys.TASK_PRIORITY_KEY] != null
           ? json[DBKeys.TASK_PRIORITY_KEY]
           : '',
       taskName:
           json[DBKeys.TASK_NAME_KEY] != null ? json[DBKeys.TASK_NAME_KEY] : '',
+      taskCompletionDate: json[DBKeys.TASK_COMPLETION_DATE_KEY] != null
+          ? json[DBKeys.TASK_COMPLETION_DATE_KEY]
+          : '',
+      taskCreationDate: json[DBKeys.TASK_CREATION_DATE_KEY] != null
+          ? json[DBKeys.TASK_CREATION_DATE_KEY]
+          : '',
+      isTaskDone: json[DBKeys.TASK_STATUES_KEY] != null
+          ? json[DBKeys.TASK_STATUES_KEY]
+          : 0,
     );
   }
 }

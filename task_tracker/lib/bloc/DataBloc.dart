@@ -1,5 +1,7 @@
+import 'package:task_tracker/models/CategoryModel.dart';
 import 'package:task_tracker/models/TaskModel.dart';
 import 'package:bloc/bloc.dart';
+import 'package:task_tracker/models/UserDataModel.dart';
 import 'package:task_tracker/resources/Repository.dart';
 
 class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
@@ -12,8 +14,8 @@ class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
     if (event is LoadNotes) {
       yield DataLoading();
       try {
-        List<TaskViewModel> data = await loadUserNotes();
-        yield DataLoaded(userNotes: data);
+        SingleUserDataModel data = await loadUserNotes();
+        yield DataLoaded(userData: data);
       } catch (ex) {
         print('Data Loading Error accured  => $ex');
         yield LoadDataError();
@@ -22,20 +24,33 @@ class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
       //yield DataLoading();
       bool deleteStatues = await deleteNote(event.taskViewModel);
       if (deleteStatues) {
-        List<TaskViewModel> data = await loadUserNotes();
-        yield DataLoaded(userNotes: data);
+        SingleUserDataModel data = await loadUserNotes();
+        yield DataLoaded(userData: data);
+      } else {
+        yield LoadDataError();
+      }
+    } else if (event is UpdateNote) {
+      //yield DataLoading();
+      bool updateSuccess = await updateNote(event.taskViewModel);
+      if (updateSuccess) {
+        SingleUserDataModel data = await loadUserNotes();
+        yield DataLoaded(userData: data);
       } else {
         yield LoadDataError();
       }
     }
   }
 
-  Future<List<TaskViewModel>> loadUserNotes() async {
+  Future<SingleUserDataModel> loadUserNotes() async {
     return (await Repository.loadData());
   }
 
   Future<bool> deleteNote(TaskViewModel taskViewModel) async {
     return (await Repository.deleteNote(note: taskViewModel));
+  }
+
+  Future<bool> updateNote(TaskViewModel taskViewModel) async {
+    return (await Repository.updateNote(note: taskViewModel));
   }
 }
 
@@ -46,8 +61,8 @@ abstract class NoteBlocStates {}
 class LoadDataError extends NoteBlocStates {}
 
 class DataLoaded extends NoteBlocStates {
-  final List<TaskViewModel> userNotes;
-  DataLoaded({this.userNotes});
+  final SingleUserDataModel userData;
+  DataLoaded({this.userData});
 }
 
 class DataLoading extends NoteBlocStates {}
@@ -63,4 +78,9 @@ class LoadNotes extends NoteBlocEvents {}
 class DeleteNote extends NoteBlocEvents {
   TaskViewModel taskViewModel;
   DeleteNote(this.taskViewModel);
+}
+
+class UpdateNote extends NoteBlocEvents {
+  TaskViewModel taskViewModel;
+  UpdateNote(this.taskViewModel);
 }

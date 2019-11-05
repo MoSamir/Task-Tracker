@@ -33,6 +33,8 @@ dependencies:
   toast: 0.1.5
   modal_progress_hud:
   cloud_firestore: 0.12.9+6
+  firebase_auth: 0.14.0+5
+
 
 
 

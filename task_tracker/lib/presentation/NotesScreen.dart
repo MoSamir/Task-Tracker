@@ -46,7 +46,7 @@ class _NotesScreenState extends State<NotesScreen> {
         builder: (context, state) {
           print('Notes screen state $state');
           if (state is DataLoaded) {
-            if (state.userNotes.length == 0)
+            if (state.userData.userTasks.length == 0)
               return EmptyListViewHolder();
             else
               return Container(
@@ -58,13 +58,51 @@ class _NotesScreenState extends State<NotesScreen> {
                       controller: _controller,
                       itemBuilder: (context, index) {
                         return TaskCard(
-                          dataModel: state.userNotes[index],
+                          taskMainColor: Color(int.parse(
+                              UtilityFunctions.resolveTaskTypeToColor(
+                                  state.userData.userTasks[index].taskType,
+                                  state.userData.userCategories))),
+                          dataModel: state.userData.userTasks[index],
                           onDeleteClicked: () {
-                            _bloc.add(DeleteNote(state.userNotes[index]));
+                            _bloc.add(
+                                DeleteNote(state.userData.userTasks[index]));
                           },
+                          onLongClick: state
+                                      .userData.userTasks[index].isTaskDone ==
+                                  0
+                              ? () {
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: true,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(Strings.CLOSE_TASK_TITLE),
+                                          actions: <Widget>[
+                                            RaisedButton(
+                                              color: AppColors.APP_COLOR,
+                                              child: Text(
+                                                Strings.CLOSE_BUTTON_LABEL,
+                                                style: TextStyle(
+                                                  color: AppColors.WHITE_COLOR,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                state.userData.userTasks[index]
+                                                    .isTaskDone = 1;
+                                                _bloc.add(UpdateNote(state
+                                                    .userData
+                                                    .userTasks[index]));
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        );
+                                      });
+                                }
+                              : null,
                         );
                       },
-                      itemCount: state.userNotes.length,
+                      itemCount: state.userData.userTasks.length,
                     ),
                     delay: Duration(seconds: 2),
                   ),
@@ -82,8 +120,9 @@ class _NotesScreenState extends State<NotesScreen> {
 
   void startScroll() {
     Future.delayed(Duration(seconds: 1), () {
-      _controller.animateTo(_controller.position.maxScrollExtent,
-          duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+      if (_controller.hasClients)
+        _controller.animateTo(_controller.position.maxScrollExtent,
+            duration: Duration(milliseconds: 500), curve: Curves.decelerate);
     });
   }
 }

@@ -1,9 +1,9 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:task_tracker/models/TaskModel.dart';
+import 'package:task_tracker/models/CategoryModel.dart';
 import 'package:task_tracker/utilities/Constants.dart';
 
-class TaskDatabaseProvider {
+class CategoryDatabaseProvider {
   static Database database;
 
   static openDbConnection() async {
@@ -12,49 +12,48 @@ class TaskDatabaseProvider {
     );
   }
 
-  static Future<bool> createTask(TaskViewModel newTask) async {
+  static Future<bool> createCategory(CategoryViewModel newCategory) async {
     if (database == null) await openDbConnection();
 
     var result = await database.insert(
-      DBKeys.TASKS_TABLE_NAME,
-      newTask.toMap(),
+      DBKeys.CATEGORY_TABLE_NAME,
+      newCategory.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return result > 0;
   }
 
-  static Future<List<TaskViewModel>> loadTasks() async {
+  static Future<List<CategoryViewModel>> loadCategories() async {
     if (database == null) await openDbConnection();
 
     final List<Map<String, dynamic>> maps =
-        await database.query(DBKeys.TASKS_TABLE_NAME);
+        await database.query(DBKeys.CATEGORY_TABLE_NAME);
 
-    List<TaskViewModel> responseList = [];
+    List<CategoryViewModel> responseList = [];
     for (int i = 0; i < maps.length; i++)
-      responseList.add(TaskViewModel.fromJson(maps[i]));
-
+      responseList.add(CategoryViewModel.fromJson(maps[i]));
     return responseList;
   }
 
-  static Future<bool> updateTask(TaskViewModel task) async {
+  static Future<bool> updateCategory(CategoryViewModel category) async {
     if (database == null) await openDbConnection();
 
     var result = await database.update(
-      DBKeys.TASKS_TABLE_NAME,
-      task.toMap(),
-      where: "${DBKeys.TASK_ID_KEY} = ?",
-      whereArgs: [task.taskId],
+      DBKeys.CATEGORY_TABLE_NAME,
+      category.toMap(),
+      where: "${DBKeys.CATEGORY_ID_KEY} = ?",
+      whereArgs: [category.categoryId],
     );
     return result > 0;
   }
 
-  static Future<bool> deleteTask(TaskViewModel task) async {
+  static Future<bool> deleteCategory(CategoryViewModel task) async {
     if (database == null) await openDbConnection();
 
     var result = await database.delete(
-      DBKeys.TASKS_TABLE_NAME,
-      where: "${DBKeys.TASK_ID_KEY} = ?",
-      whereArgs: [task.taskId],
+      DBKeys.CATEGORY_TABLE_NAME,
+      where: "${DBKeys.CATEGORY_ID_KEY} = ?",
+      whereArgs: [task.categoryId],
     );
     return result > 0;
   }

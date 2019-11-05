@@ -5,8 +5,7 @@ import 'package:task_tracker/presentation/BarRootScreen.dart';
 import 'package:task_tracker/resources/database_provider/DatabaseProvider.dart';
 import 'package:task_tracker/resources/firebase_provider/FirebaseProvider.dart';
 
-void main() {
-  DatabaseProvider.createDb();
+void main() async {
   runApp(MyApp());
 }
 
@@ -21,6 +20,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    DatabaseProvider.createDb(bloc: dataBloc);
     // TODO: implement initState
     super.initState();
   }
@@ -31,7 +31,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         state == AppLifecycleState.suspending) {
       if (dataBloc.state is DataLoaded) {
         print('Backup initialzed ');
-        BackupController.backupDB((dataBloc.state as DataLoaded).userNotes);
+        BackupController.backupDB(
+            (dataBloc.state as DataLoaded).userData.userTasks);
       }
     }
   }
