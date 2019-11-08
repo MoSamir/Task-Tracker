@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:task_tracker/bloc/DataBloc.dart';
@@ -41,15 +40,6 @@ class DatabaseProvider {
       categoryName: 'Health',
       categoryColor: '0xFF80D8FF',
     ));
-
-    //------------------------
-    print('Color Orange');
-    print('Orange hashCode => ${Colors.lightBlueAccent.hashCode.toString()}');
-    print('Orange toString => ${Colors.lightBlueAccent.toString()}');
-    print('Orange  => ${Colors.lightBlueAccent}');
-    print('**************************************************');
-    //--------------------------
-
     bloc.add(LoadNotes());
   }
 }

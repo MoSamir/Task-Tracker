@@ -32,11 +32,16 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     dataBloc = BlocProvider.of<DataBloc>(context);
     _bloc = AddNoteBloc();
     dataBloc.listen((state) {
-      if (state is DataLoaded)
+      if (state is DataLoaded) if (mounted) {
         setState(() {
           taskViewModel.taskType =
               state.userData.userCategories[0].categoryName;
         });
+      }
+    });
+    _taskNameController.addListener(() {
+      if (categoryDefined == false && _taskNameController.text.length > 0)
+        suggestCategory(_taskNameController.text);
     });
     // TODO: implement initState
     super.initState();
@@ -127,10 +132,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                             : Strings.REQUIRED_FIELD_ERROR;
                                       },
                                       controller: _taskNameController,
-                                      onChanged: (text) {
-                                        if (categoryDefined == false)
-                                          suggestCategory(text);
-                                      },
                                       cursorColor: taskColor,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,

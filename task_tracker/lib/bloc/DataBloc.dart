@@ -1,6 +1,9 @@
-import 'package:task_tracker/models/CategoryModel.dart';
-import 'package:task_tracker/models/TaskModel.dart';
+import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:bloc/bloc.dart';
+import 'package:task_tracker/models/ChartModel.dart';
+import 'package:task_tracker/models/TaskModel.dart';
 import 'package:task_tracker/models/UserDataModel.dart';
 import 'package:task_tracker/resources/Repository.dart';
 
@@ -8,6 +11,42 @@ class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
   @override
   // TODO: implement initialState
   NoteBlocStates get initialState => InitialScreen();
+
+  Map<String, ChartModel> createReport() {
+    Map<String, ChartModel> statisticalInfo = Map();
+    if (state is DataLoaded) {
+      (state as DataLoaded).userData.userCategories.forEach((category) {
+        statisticalInfo.putIfAbsent(
+            category.categoryName,
+            () => ChartModel(
+                  percentage: 0,
+                  deletedTasks: 0,
+                  inProgressTasks: 0,
+                  segmentColor: Color(int.parse(category.categoryColor)),
+                  solvedTasks: 0,
+                  segmentLabel: category.categoryName,
+                ));
+      });
+      (state as DataLoaded).userData.userTasks.forEach((task) {
+        if (task.isTaskDone == 0) {
+          statisticalInfo[task.taskType].inProgressTasks++;
+          statisticalInfo[task.taskType].totalCount++;
+        } else if (task.isTaskDone == 1) {
+          statisticalInfo[task.taskType].solvedTasks++;
+          statisticalInfo[task.taskType].totalCount++;
+        } else if (task.isTaskDone == 2) {
+          statisticalInfo[task.taskType].deletedTasks++;
+          statisticalInfo[task.taskType].totalCount++;
+        }
+      });
+
+      statisticalInfo.forEach((key, value) {
+        value.percentage =
+            (value.solvedTasks / math.max(value.totalCount, 1) * 1.0);
+      });
+    }
+    return statisticalInfo;
+  }
 
   @override
   Stream<NoteBlocStates> mapEventToState(NoteBlocEvents event) async* {
@@ -38,6 +77,15 @@ class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
       } else {
         yield LoadDataError();
       }
+    } else if (event is CloseNote) {
+      //yield DataLoading();
+      bool updateSuccess = await closeNote(event.taskViewModel);
+      if (updateSuccess) {
+        SingleUserDataModel data = await loadUserNotes();
+        yield DataLoaded(userData: data);
+      } else {
+        yield LoadDataError();
+      }
     }
   }
 
@@ -51,6 +99,10 @@ class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
 
   Future<bool> updateNote(TaskViewModel taskViewModel) async {
     return (await Repository.updateNote(note: taskViewModel));
+  }
+
+  Future<bool> closeNote(TaskViewModel taskViewModel) async {
+    return (await Repository.closeNote(note: taskViewModel));
   }
 }
 
@@ -83,4 +135,9 @@ class DeleteNote extends NoteBlocEvents {
 class UpdateNote extends NoteBlocEvents {
   TaskViewModel taskViewModel;
   UpdateNote(this.taskViewModel);
+}
+
+class CloseNote extends NoteBlocEvents {
+  TaskViewModel taskViewModel;
+  CloseNote(this.taskViewModel);
 }

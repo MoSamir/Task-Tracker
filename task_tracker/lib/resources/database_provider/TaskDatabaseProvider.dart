@@ -15,6 +15,8 @@ class TaskDatabaseProvider {
   static Future<bool> createTask(TaskViewModel newTask) async {
     if (database == null) await openDbConnection();
 
+    newTask.taskCreationDate = DateTime.now().toString();
+
     var result = await database.insert(
       DBKeys.TASKS_TABLE_NAME,
       newTask.toMap(),
@@ -38,7 +40,18 @@ class TaskDatabaseProvider {
 
   static Future<bool> updateTask(TaskViewModel task) async {
     if (database == null) await openDbConnection();
+    var result = await database.update(
+      DBKeys.TASKS_TABLE_NAME,
+      task.toMap(),
+      where: "${DBKeys.TASK_ID_KEY} = ?",
+      whereArgs: [task.taskId],
+    );
+    return result > 0;
+  }
 
+  static Future<bool> closeTask(TaskViewModel task) async {
+    if (database == null) await openDbConnection();
+    task.taskCompletionDate = DateTime.now().toString();
     var result = await database.update(
       DBKeys.TASKS_TABLE_NAME,
       task.toMap(),

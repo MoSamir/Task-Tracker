@@ -50,6 +50,15 @@ class Repository {
     }
   }
 
+  static Future<bool> closeNote({TaskViewModel note}) {
+    try {
+      return TaskDatabaseProvider.closeTask(note);
+    } catch (ex) {
+      print('Exception Accured While updating Data From DB => $ex');
+      throw ex;
+    }
+  }
+
   //----------------- FIRE-BASE OPERATIONS -------------------------
 
   static Future<void> requestAuthCode(

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:task_tracker/bloc/AddNoteBloc.dart';
 import 'package:task_tracker/bloc/DataBloc.dart';
-
 import 'package:task_tracker/presentation/utilities_widgets/EmptyListPlaceHolder.dart';
 import 'package:task_tracker/presentation/utilities_widgets/ErrorView.dart';
 import 'package:task_tracker/presentation/utilities_widgets/LoadingView.dart';
@@ -89,7 +88,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                               onPressed: () {
                                                 state.userData.userTasks[index]
                                                     .isTaskDone = 1;
-                                                _bloc.add(UpdateNote(state
+                                                _bloc.add(CloseNote(state
                                                     .userData
                                                     .userTasks[index]));
                                                 Navigator.pop(context);
