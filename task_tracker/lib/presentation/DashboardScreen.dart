@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:task_tracker/bloc/DataBloc.dart';
 import 'package:task_tracker/presentation/list_cards/ChartCard.dart';
+import 'package:task_tracker/presentation/utilities_widgets/LoadingView.dart';
 import 'package:task_tracker/utilities/Constants.dart';
 import 'package:toast/toast.dart';
 
+import 'AddCategory.dart';
 import 'list_cards/CategoryCard.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -19,6 +21,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     bloc = BlocProvider.of<DataBloc>(context);
     super.initState();
+
+    if (bloc.state is DataLoaded == false &&
+        bloc.state is DataLoading == false) {
+      bloc.add(LoadUserData());
+    }
   }
 
   @override
@@ -29,16 +36,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: Text(Strings.HOME),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-          child: Column(
-        children: <Widget>[
-          statisticWidget(),
-          categoriesGrid(),
-          SizedBox(
-            height: 50,
-          ),
-        ],
-      )),
+      body: BlocBuilder(
+        bloc: bloc,
+        builder: (context, state) {
+          if (state is DataLoaded) {
+            return SingleChildScrollView(
+                child: Column(
+              children: <Widget>[
+                statisticWidget(),
+                categoriesGrid(),
+                SizedBox(
+                  height: 50,
+                ),
+              ],
+            ));
+          } else
+            return Container(
+              child: Center(child: LoadingView()),
+            );
+        },
+      ),
       // ErrorHandleView(),
     );
   }
@@ -74,8 +91,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               (bloc.state as DataLoaded).userData.userCategories.length) {
             return CategoryCard(
               addCategoryAction: () {
-                Toast.show("Comming Soon", context,
+                Toast.show("warning -- Initial Draft", context,
                     duration: 5, gravity: Toast.BOTTOM);
+
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return AddCategory(
+                    dataBloc: bloc,
+                  );
+                }));
               },
             );
           } else

@@ -34,106 +34,121 @@ class StatisticsChart extends StatelessWidget {
                 end: Alignment.bottomRight,
                 colors: [chartModel.segmentColor, Colors.black12]),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Stack(
             children: <Widget>[
-              AnimatedCircularChart(
-                key: _chartKey,
-                holeLabel: chartModel.totalCount == 0
-                    ? '100 %'
-                    : '${(chartModel.percentage * 100)} %',
-                labelStyle: TextStyle(
-                  color: chartModel.segmentColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
+              Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  chartModel.segmentLabel,
+                  style: TextStyle(
+                    color: AppColors.WHITE_COLOR,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
-                duration: Duration(seconds: 2),
-                size: const Size(120.0, 120.0),
-                initialChartData: <CircularStackEntry>[
-                  new CircularStackEntry(
-                    chartInfo(),
-                    rankKey: 'progress',
-                  ),
-                ],
-                chartType: CircularChartType.Radial,
-                edgeStyle: SegmentEdgeStyle.round,
-                percentageValues: true,
               ),
-              Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "In progress",
-                        style: TextStyle(
-                          color: AppColors.WHITE_COLOR,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        '${chartModel.inProgressTasks}',
-                        style: TextStyle(
-                          color: AppColors.WHITE_COLOR,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                  AnimatedCircularChart(
+                    key: _chartKey,
+                    holeLabel: chartModel.totalCount == 0
+                        ? '100 %'
+                        : '${(chartModel.percentage * 100)} %',
+                    labelStyle: TextStyle(
+                      color: chartModel.segmentColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                    ),
+                    duration: Duration(seconds: 2),
+                    size: const Size(120.0, 120.0),
+                    initialChartData: <CircularStackEntry>[
+                      new CircularStackEntry(
+                        chartInfo(),
+                        rankKey: 'progress',
                       ),
                     ],
+                    chartType: CircularChartType.Radial,
+                    edgeStyle: SegmentEdgeStyle.round,
+                    percentageValues: true,
                   ),
-                  Container(
-                    color: Colors.black12,
-                    height: 20,
-                    width: 2,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text(
-                        "Solved",
-                        style: TextStyle(
-                          color: AppColors.WHITE_COLOR,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "In progress",
+                            style: TextStyle(
+                              color: AppColors.WHITE_COLOR,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            '${chartModel.inProgressTasks}',
+                            style: TextStyle(
+                              color: AppColors.WHITE_COLOR,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '${chartModel.solvedTasks}',
-                        style: TextStyle(
-                          color: AppColors.WHITE_COLOR,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                      Container(
+                        color: Colors.black12,
+                        height: 20,
+                        width: 2,
                       ),
-                    ],
-                  ),
-                  Container(
-                    color: Colors.black12,
-                    height: 20,
-                    width: 2,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Archived",
-                        style: TextStyle(
-                          color: AppColors.WHITE_COLOR,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Solved",
+                            style: TextStyle(
+                              color: AppColors.WHITE_COLOR,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            '${chartModel.solvedTasks}',
+                            style: TextStyle(
+                              color: AppColors.WHITE_COLOR,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '${chartModel.deletedTasks}',
-                        style: TextStyle(
-                          color: AppColors.WHITE_COLOR,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                      Container(
+                        color: Colors.black12,
+                        height: 20,
+                        width: 2,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Archived",
+                            style: TextStyle(
+                              color: AppColors.WHITE_COLOR,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            '${chartModel.deletedTasks}',
+                            style: TextStyle(
+                              color: AppColors.WHITE_COLOR,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

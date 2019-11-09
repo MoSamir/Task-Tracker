@@ -71,7 +71,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             if (state is SuccessState) {
               Toast.show(Strings.SAVE_TASK_SUCCESS_MESSAGE, context,
                   duration: 5, gravity: Toast.BOTTOM);
-              BlocProvider.of<DataBloc>(context).add(LoadNotes());
+              BlocProvider.of<DataBloc>(context).add(LoadUserData());
               _taskNameController.clear();
               _taskDescriptionController.clear();
               RootScreen.navigatorKey.currentState.setPage(2);
@@ -92,7 +92,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             builder: (context, state) {
               return ModalProgressHUD(
                 inAsyncCall: state is NoteLoading,
-                progressIndicator: LoadingView(),
+                progressIndicator: LoadingView(
+                  indicatorColor: taskColor,
+                ),
                 child: SingleChildScrollView(
                   child: Container(
                     child: Form(

@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:task_tracker/models/CategoryModel.dart';
 
-class Constants {}
+class Constants {
+  static const ONE_SIGNAL_ID = "2ab8756f-5831-45ad-9d1b-18bb85258598";
+}
 
 class Strings {
   static const ALL_NOTES = "All Notes";
@@ -18,9 +20,7 @@ class Strings {
   static const SAVE_TASK_BUTTON_TEXT = "Save Task";
   static const SAVE_TASK_SUCCESS_MESSAGE = "Task saved successfully";
   static const SAVE_TASK_FAILED_MESSAGE = "Something went wrong";
-
   static const REQUIRED_FIELD_ERROR = "Task name is required";
-  // static const TASK_TYPES = ['Work', 'Personal', 'Health'];
 
 // -------------------Close Task---------------------------------
 
@@ -78,5 +78,15 @@ class UtilityFunctions {
       if (taskType == userCategories[i].categoryName)
         return userCategories[i].categoryColor;
     return AppColors.APP_COLOR;
+  }
+
+  static isDarkColor(Color color) {
+    double darkness = 1 -
+        (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+    if (darkness < 0.5) {
+      return false; // It's a light color
+    } else {
+      return true; // It's a dark color
+    }
   }
 }

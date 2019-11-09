@@ -8,7 +8,7 @@ class CategoryCard extends StatelessWidget {
   final CategoryViewModel categoryViewModel;
   final int associatedTasks;
   final Function addCategoryAction;
-
+  Color textColor = AppColors.BLACK_COLOR;
   CategoryCard(
       {this.categoryViewModel, this.associatedTasks, this.addCategoryAction});
 
@@ -19,6 +19,10 @@ class CategoryCard extends StatelessWidget {
         : Color((math.Random().nextDouble() * 0xFFFFFF).toInt() << 0)
             .withOpacity(1.0);
 
+    textColor = UtilityFunctions.isDarkColor(mainColor)
+        ? AppColors.WHITE_COLOR
+        : AppColors.BLACK_COLOR;
+
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -27,7 +31,8 @@ class CategoryCard extends StatelessWidget {
           elevation: 2,
           borderRadius: BorderRadius.circular(10),
           color: mainColor,
-          child: Container(
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 900),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               gradient: LinearGradient(
@@ -52,13 +57,27 @@ class CategoryCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        Text(categoryViewModel.categoryName),
+        Text(
+          categoryViewModel.categoryName,
+          style: TextStyle(
+            color: textColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text('$associatedTasks'),
+            Text(
+              '$associatedTasks',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                color: textColor,
+              ),
+            ),
           ],
         ),
       ],
@@ -83,7 +102,7 @@ class CategoryCard extends StatelessWidget {
           'New Category',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.white,
+            color: textColor,
             fontSize: 18,
             fontWeight: FontWeight.w800,
           ),

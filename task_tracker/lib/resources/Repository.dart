@@ -59,6 +59,15 @@ class Repository {
     }
   }
 
+  static Future<bool> addCategory({CategoryViewModel category}) {
+    try {
+      return CategoryDatabaseProvider.createCategory(category);
+    } catch (ex) {
+      print('Exception Accured While Loading Data From DB => $ex');
+      throw ex;
+    }
+  }
+
   //----------------- FIRE-BASE OPERATIONS -------------------------
 
   static Future<void> requestAuthCode(

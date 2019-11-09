@@ -26,7 +26,7 @@ class _NotesScreenState extends State<NotesScreen> {
         ScrollController(initialScrollOffset: 0, keepScrollOffset: true);
 
     if (_bloc.state is DataLoaded == false &&
-        _bloc.state is DataLoading == false) _bloc.add(LoadNotes());
+        _bloc.state is DataLoading == false) _bloc.add(LoadUserData());
     // TODO: implement initState
     super.initState();
   }

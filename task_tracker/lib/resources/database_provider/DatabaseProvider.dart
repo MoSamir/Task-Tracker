@@ -40,6 +40,6 @@ class DatabaseProvider {
       categoryName: 'Health',
       categoryColor: '0xFF80D8FF',
     ));
-    bloc.add(LoadNotes());
+    bloc.add(LoadUserData());
   }
 }

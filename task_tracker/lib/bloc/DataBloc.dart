@@ -50,7 +50,7 @@ class DataBloc extends Bloc<NoteBlocEvents, NoteBlocStates> {
 
   @override
   Stream<NoteBlocStates> mapEventToState(NoteBlocEvents event) async* {
-    if (event is LoadNotes) {
+    if (event is LoadUserData) {
       yield DataLoading();
       try {
         SingleUserDataModel data = await loadUserNotes();
@@ -125,7 +125,7 @@ class InitialScreen extends NoteBlocStates {}
 
 abstract class NoteBlocEvents {}
 
-class LoadNotes extends NoteBlocEvents {}
+class LoadUserData extends NoteBlocEvents {}
 
 class DeleteNote extends NoteBlocEvents {
   TaskViewModel taskViewModel;

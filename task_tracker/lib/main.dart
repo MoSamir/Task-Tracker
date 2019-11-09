@@ -4,8 +4,12 @@ import 'package:task_tracker/bloc/DataBloc.dart';
 import 'package:task_tracker/presentation/BarRootScreen.dart';
 import 'package:task_tracker/resources/database_provider/DatabaseProvider.dart';
 import 'package:task_tracker/resources/firebase_provider/FirebaseProvider.dart';
+import 'package:task_tracker/utilities/NotificationController.dart';
 
 void main() async {
+  NotificationController.initOneSignal();
+  NotificationController.initLocalNotification();
+
   runApp(MyApp());
 }
 
