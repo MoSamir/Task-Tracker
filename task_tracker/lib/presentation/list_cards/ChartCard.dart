@@ -55,7 +55,7 @@ class StatisticsChart extends StatelessWidget {
                     key: _chartKey,
                     holeLabel: chartModel.totalCount == 0
                         ? '100 %'
-                        : '${(chartModel.percentage * 100)} %',
+                        : '${(chartModel.percentage * 100).toStringAsFixed(2)} %',
                     labelStyle: TextStyle(
                       color: chartModel.segmentColor,
                       fontSize: 20,

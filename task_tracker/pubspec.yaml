@@ -41,6 +41,8 @@ dependencies:
   flutter_local_notifications: 0.8.4
   flutter_colorpicker:
   rxdart: 0.22.6
+  auto_size_text: 2.1.0
+
 #  audioplayer: 0.5.2
 
 

@@ -114,7 +114,17 @@ class LoadDataError extends NoteBlocStates {}
 
 class DataLoaded extends NoteBlocStates {
   final SingleUserDataModel userData;
+
   DataLoaded({this.userData});
+
+  getFilteredTasks(TASK_STATUES statues) {
+    List<TaskViewModel> filteredTasks = [];
+    userData.userTasks.forEach((task) {
+      if (task.isTaskDone == statues.index) filteredTasks.add(task);
+    });
+
+    return filteredTasks;
+  }
 }
 
 class DataLoading extends NoteBlocStates {}
@@ -141,3 +151,5 @@ class CloseNote extends NoteBlocEvents {
   TaskViewModel taskViewModel;
   CloseNote(this.taskViewModel);
 }
+
+enum TASK_STATUES { ACTIVE, CLOSED, ARCHIVED }

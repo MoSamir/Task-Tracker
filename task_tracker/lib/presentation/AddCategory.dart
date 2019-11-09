@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:task_tracker/bloc/AddCategory.dart';
 import 'package:task_tracker/bloc/DataBloc.dart';
 import 'package:task_tracker/models/CategoryModel.dart';
+import 'package:task_tracker/presentation/utilities_widgets/Appbar.dart';
 import 'package:task_tracker/presentation/utilities_widgets/ErrorView.dart';
 import 'package:task_tracker/presentation/utilities_widgets/LoadingView.dart';
 import 'package:task_tracker/utilities/Constants.dart';
@@ -55,14 +56,9 @@ class _AddCategoryState extends State<AddCategory>
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height - kToolbarHeight;
-
+    double height = MediaQuery.of(context).size.height - 150;
     return Container(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.APP_COLOR,
-          title: Text('New Category'),
-        ),
         body: BlocListener(
           bloc: categoryBloc,
           listener: (context, state) {
@@ -94,40 +90,81 @@ class _AddCategoryState extends State<AddCategory>
                 progressIndicator: LoadingView(
                   indicatorColor: Color(int.parse(newCategory.categoryColor)),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: height,
-                    child: Stack(
-                      children: <Widget>[
-                        cardControls(),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: StreamBuilder<bool>(
-                            initialData: false,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: 150,
+                      child: Container(
+                        color: Colors.white,
+                        child: StreamBuilder<bool>(
                             stream: needUpdate,
                             builder: (context, snapshot) {
-                              return cardPreview();
-                            },
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: FloatingActionButton(
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                categoryBloc.add(
-                                    CreateCategory(newCategory: newCategory));
-                              }
-                            },
-                            elevation: 5,
-                            backgroundColor: Color(int.parse(newColor)),
-                            child: Icon(Icons.thumb_up),
-                          ),
-                        ),
-                      ],
+                              return AnimatedContainer(
+                                duration: Duration(milliseconds: 900),
+                                child: CustomAppbar(
+                                  appBarColor: Color(
+                                      int.parse(newCategory.categoryColor)),
+                                  screenTitle: Strings.ADD_CATEGORY,
+                                  leading: IconButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    icon: Icon(Icons.arrow_back_ios),
+                                    color: AppColors.GREY_COLOR,
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      top: 150,
+                      left: 0,
+                      right: 0,
+                      height: MediaQuery.of(context).size.height - 150,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 8),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height - 150,
+                            child: Stack(
+                              children: <Widget>[
+                                cardControls(),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: StreamBuilder<bool>(
+                                    initialData: false,
+                                    stream: needUpdate,
+                                    builder: (context, snapshot) {
+                                      return cardPreview();
+                                    },
+                                  ),
+                                ),
+                                Positioned(
+                                  left: 5,
+                                  bottom: 10,
+                                  child: FloatingActionButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState.validate()) {
+                                        categoryBloc.add(CreateCategory(
+                                            newCategory: newCategory));
+                                      }
+                                    },
+                                    elevation: 5,
+                                    backgroundColor: Color(int.parse(newColor)),
+                                    child: Icon(Icons.thumb_up),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
@@ -140,7 +177,7 @@ class _AddCategoryState extends State<AddCategory>
   cardPreview() {
     return Container(
       width: 200,
-      height: 250,
+      height: 240,
       child: CategoryCard(
         associatedTasks: 0,
         categoryViewModel: newCategory,

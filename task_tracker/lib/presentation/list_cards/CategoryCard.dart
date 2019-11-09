@@ -85,29 +85,32 @@ class CategoryCard extends StatelessWidget {
   }
 
   Widget buildAddCategoryCard() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.add_circle_outline,
-            color: AppColors.WHITE_COLOR,
-            size: 30,
+    return GestureDetector(
+      onTap: addCategoryAction,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add_circle_outline,
+              color: AppColors.WHITE_COLOR,
+              size: 30,
+            ),
+            onPressed: addCategoryAction,
           ),
-          onPressed: addCategoryAction,
-        ),
-        Text(
-          'New Category',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
+          Text(
+            'New Category',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

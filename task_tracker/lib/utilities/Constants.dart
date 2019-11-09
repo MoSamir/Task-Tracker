@@ -5,13 +5,17 @@ import 'package:task_tracker/models/CategoryModel.dart';
 
 class Constants {
   static const ONE_SIGNAL_ID = "2ab8756f-5831-45ad-9d1b-18bb85258598";
+  static const CURVE_HEIGHT = 160.0;
+  static const AVATAR_RADIUS = CURVE_HEIGHT * 0.28;
+  static const AVATAR_DIAMETER = AVATAR_RADIUS * 2;
+  static const ANIMATION_ENABLED = false;
 }
 
 class Strings {
-  static const ALL_NOTES = "All Notes";
+  static const ALL_NOTES = "Notes";
   static const ADD_TASK = "Add Task";
+  static const ADD_CATEGORY = "Add Category";
   static const HOME = "Home";
-
   //-------------- ADD TASK --------------------
   static const TASK_NAME_HINT = "Name your task";
   static const TASK_CATEGORY_LABEL = "Choose category";
@@ -38,6 +42,9 @@ class AppColors {
   static const APP_COLOR = Color(0xFF745c97);
   static const WHITE_COLOR = Colors.white;
   static const BLACK_COLOR = Colors.black;
+  static const GREY_COLOR = Colors.grey;
+  static const Color GREY_200_COLOR = Color(0xFFf9f9f9);
+
   static const CLOSED_TASK_COLOR = Colors.grey;
 }
 

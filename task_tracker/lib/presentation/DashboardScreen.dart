@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:task_tracker/bloc/DataBloc.dart';
 import 'package:task_tracker/presentation/list_cards/ChartCard.dart';
+import 'package:task_tracker/presentation/utilities_widgets/Appbar.dart';
 import 'package:task_tracker/presentation/utilities_widgets/LoadingView.dart';
 import 'package:task_tracker/utilities/Constants.dart';
 import 'package:toast/toast.dart';
@@ -31,11 +32,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.APP_COLOR,
-        title: Text(Strings.HOME),
-        centerTitle: true,
-      ),
       body: BlocBuilder(
         bloc: bloc,
         builder: (context, state) {
@@ -43,6 +39,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             return SingleChildScrollView(
                 child: Column(
               children: <Widget>[
+                Container(
+                  height: 150,
+                  child: CustomAppbar(
+                    appBarColor: AppColors.APP_COLOR,
+                    screenTitle: Strings.HOME,
+                  ),
+                ),
                 statisticWidget(),
                 categoriesGrid(),
                 SizedBox(
