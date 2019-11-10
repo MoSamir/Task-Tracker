@@ -57,6 +57,7 @@ class _AddCategoryState extends State<AddCategory>
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height - 150;
+
     return Container(
       child: Scaffold(
         body: BlocListener(
